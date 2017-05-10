@@ -38,7 +38,7 @@ def make_move(currentBot, currentMap):
 
 def place_move(source, dest):
 	moveHalf = False
-	if _map.turn > 150:
+	if _map.turn > 200:
 		if source in _map.generals:
 			moveHalf = True
 		elif source in _map.cities:
@@ -190,4 +190,4 @@ def move_collect_to_path():
 # Start Game
 import startup
 if __name__ == '__main__':
-	startup.startup(make_move, "PurdueBot-P2")
+	startup.startup(make_move, "EklipZpc")

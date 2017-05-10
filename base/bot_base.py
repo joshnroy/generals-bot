@@ -44,29 +44,39 @@ class GeneralsBot(object):
 
 		# Start Game Thread
 		_create_thread(self._start_game_thread)
+		time.sleep(0.2)
 		# Start Chat Message Thead
-		_create_thread(self._start_chat_thread)
+		#_create_thread(self._start_chat_thread)
+		#time.sleep(0.2)
 		# Start Game Move Thread
 		_create_thread(self._start_moves_thread)
+		time.sleep(0.2)
 
 		# Start Game Viewer
 		if (gameViewer) and HAS_VIEWER:
 			window_title = "%s (%s)" % (self._name, self._gameType)
 			self._viewer = GeneralsViewer(window_title)
 			self._viewer.mainViewerLoop() # Consumes Main Thread
+			time.sleep(0.5)
 			os._exit(0) # End Program
 
 		while (self._running):
-			time.sleep(10)
+			time.sleep(1)
 
 		os._exit(0) # End Program
 
 	######################### Handle Updates From Server #########################
+	
+	def getLastCommand(self):
+		return self._game.lastChatCommand	
+
 
 	def _start_game_thread(self):
 		# Create Game
-		if (self._gameType in ['1v1','ffa','private']):
+		if (self._gameType in ['1v1','ffa','private','team']):
 			self._game = generals.Generals(self._name, self._name, self._gameType, gameid=self._privateRoomID, public_server=self._public_server)
+		elif (self._gameType == "team"): # team
+			self._game = generals.Generals(self._name, self._name, 'team')
 
 		# Start Receiving Updates
 		try:

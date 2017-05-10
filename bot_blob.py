@@ -20,6 +20,11 @@ def make_move(currentBot, currentMap):
 	global _bot, _map
 	_bot = currentBot
 	_map = currentMap
+	
+	command = currentBot.getLastCommand()
+	
+	if (command == "-s"):
+		return
 
 	if (_map.turn % 3 == 0):
 		if not move_outward():
@@ -30,7 +35,7 @@ def make_move(currentBot, currentMap):
 
 def place_move(source, dest):
 	moveHalf = False
-	if _map.turn > 150:
+	if _map.turn > 200:
 		if source in _map.generals:
 			moveHalf = True
 		elif source in _map.cities:
@@ -95,4 +100,4 @@ def move_toward():
 # Start Game
 import startup
 if __name__ == '__main__':
-	startup.startup(make_move, "PurdueBot-B2")
+	startup.startup(make_move, "EklipZblob")

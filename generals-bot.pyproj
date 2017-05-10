@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{085c9085-d9f9-4851-9787-fd22bfc57947}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>bot_ek0x45.py</StartupFile>
+    <SearchPath>..\..\..\..\..\Python27\</SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>{a9696fd6-96ad-422b-9dcc-c0571433ed61}</InterpreterId>
+    <InterpreterVersion>3.5</InterpreterVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="License.txt" />
+    <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="base\bot_base.py" />
+    <Compile Include="base\client\generals.py" />
+    <Compile Include="base\client\map.py" />
+    <Compile Include="base\client\__init__.py" />
+    <Compile Include="base\viewer.py" />
+    <Compile Include="base\__init__.py" />
+    <Compile Include="bot_ek0x45.py" />
+    <Compile Include="bot_blob.py" />
+    <Compile Include="bot_path_collect.py" />
+    <Compile Include="startup.py" />
+    <Compile Include="__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="base" />
+    <Folder Include="base\client" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{a9696fd6-96ad-422b-9dcc-c0571433ed61}\3.5" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>

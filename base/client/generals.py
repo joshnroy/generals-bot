@@ -14,20 +14,28 @@ from . import map
 _ENDPOINT = "ws://botws.generals.io/socket.io/?EIO=3&transport=websocket"
 _ENDPOINT_PUBLIC = "ws://ws.generals.io/socket.io/?EIO=3&transport=websocket"
 
-_BOT_KEY = "013f0dijsf"
+#_BOT_KEY = "013f0dijsf"
+#_BOT_KEY = "eklipzai"
+_BOT_KEY = "ekbot2"
 
 class Generals(object):
 	def __init__(self, userid, username, mode="1v1", gameid=None,
 				 force_start=True, public_server=False):
 		logging.debug("Creating connection")
 		self._ws = create_connection(_ENDPOINT if not public_server else _ENDPOINT_PUBLIC)
+		logging.debug("Connection created.")
 		self._lock = threading.RLock()
 		self._gameid = None
+		self.lastChatCommand = ""
+		self.earlyLogs = []
+		self.logFile = None
 
 		logging.debug("Starting heartbeat thread")
 		_spawn(self._start_sending_heartbeat)
+                if "[Bot]" not in username:
+                    username = "[Bot]" + username
 
-		logging.debug("Joining game")
+		logging.debug("Joining game. Username: " + username)
 		self._send(["star_and_rank", userid, _BOT_KEY])
 		self._send(["set_username", userid, username, _BOT_KEY])
 
@@ -44,7 +52,7 @@ class Generals(object):
 			self._send(["play", userid, _BOT_KEY])
 		else:
 			raise ValueError("Invalid mode")
-
+				
 		if (force_start):
 			_spawn(self._send_forcestart)
 
@@ -101,6 +109,12 @@ class Generals(object):
 			elif msg[0] == "game_start":
 				logging.info("Game info: {}".format(msg[1]))
 				self._start_data = msg[1]
+				self.logFile = "H:\\GeneralsLogs\\" + self._start_data['replay_id'] + ".txt" 
+				
+				with open(self.logFile, "a+") as myfile:
+					for log in self.earlyLogs:
+						myfile.write(log)
+					self.earlyLogs = None
 			elif msg[0] == "game_update":
 				yield self._make_update(msg[1])
 			elif msg[0] in ["game_won", "game_lost"]:
@@ -109,7 +123,9 @@ class Generals(object):
 			elif msg[0] == "chat_message":
 				chat_msg = msg[2]
 				if "username" in chat_msg:
-					logging.info("From %s: %s" % (chat_msg["username"],chat_msg["text"]))
+					logging.info("From %s: %s" % (chat_msg["username"], chat_msg["text"]))
+					if (chat_msg["text"].startswith("-")):
+						self.lastChatCommand = chat_msg["text"]
 				else:
 					logging.info("Message: %s" % chat_msg["text"])
 			elif msg[0] == "error_set_username":
@@ -118,7 +134,8 @@ class Generals(object):
 				logging.info("Unknown message type: {}".format(msg))
 
 	def close(self):
-		self._ws.close()
+		with self._lock:
+			self._ws.close()
 
 	def _make_update(self, data):
 		if not self._seen_update:
@@ -132,7 +149,7 @@ class Generals(object):
 		return self._map.updateResult(update)
 
 	def _send_forcestart(self):
-		time.sleep(20)
+		time.sleep(4)
 		self._send(["set_force_start", self._gameid, True])
 		logging.info("Sent force_start")
 
@@ -141,14 +158,27 @@ class Generals(object):
 			try:
 				with self._lock:
 					self._ws.send("2")
+				
+				if (self.logFile == None):
+					self.earlyLogs.append("\n2")
+				else:
+					with open(self.logFile, "a+") as myfile:
+						myfile.write("\n2")
 			except WebSocketConnectionClosedException:
 				break
-			time.sleep(0.1)
+			time.sleep(1)
 
 	def _send(self, msg):
 		try:
+			toSend = "42" + json.dumps(msg)
 			with self._lock:
-				self._ws.send("42" + json.dumps(msg))
+				self._ws.send(toSend)
+			
+			if (self.logFile == None):
+				self.earlyLogs.append("\n" + toSend)
+			else:
+				with open(self.logFile, "a+") as myfile:
+					myfile.write("\n" + toSend)
 		except WebSocketConnectionClosedException:
 			pass
 
