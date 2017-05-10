@@ -1284,5 +1284,4 @@ def move_toward():
 # Start Game
 import startup
 if __name__ == '__main__':
-	startup.startup(make_move, "[UW]EklipZ")
-	#startup.startup(make_move, "EklipZTest2")
+	startup.startup(make_move, "EklipZTest2")
