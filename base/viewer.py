@@ -10,6 +10,7 @@ import threading
 import time
 from copy import deepcopy
 from base.client.generals import _spawn
+import sys
 
 # Color Definitions
 BLACK = (0,0,0)
@@ -83,7 +84,7 @@ class GeneralsViewer(object):
 		self.pathAlphas = []
 		self.Arrow = [(CELL_WIDTH / 2, 0), (CELL_WIDTH / 8, CELL_HEIGHT / 2), (CELL_WIDTH / 2, CELL_HEIGHT / 4), (7 * CELL_WIDTH / 8, CELL_HEIGHT / 2)]
 		self.repId = self._map.replay_url.split("/").pop()
-		self.logDirectory = "H:\\GeneralsLogs\\{}".format(self.repId)
+		self.logDirectory = "./{}".format(self.repId)
 		if not os.path.exists(self.logDirectory):
 			os.makedirs(self.logDirectory)
 		_spawn(self.save_image)
@@ -428,8 +429,8 @@ class GeneralsViewer(object):
  
 			# Go ahead and update the screen with what we've drawn.
 			pygame.display.flip()
-		except:
-			print("Unexpected error:", sys.exc_info()[0])
+		except Exception as e:
+			print(e)
 	
 
 	def save_image(self):		

@@ -100,4 +100,4 @@ def move_toward():
 # Start Game
 import startup
 if __name__ == '__main__':
-	startup.startup(make_move, "EklipZblob")
+	startup.startup(make_move, "testbot")
