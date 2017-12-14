@@ -7,7 +7,7 @@
 
 import logging
 import os
-from queue import Queue
+from Queue import Queue
 import random
 import threading
 import time
